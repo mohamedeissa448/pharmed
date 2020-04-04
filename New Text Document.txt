@@ -1,0 +1,90 @@
+<table #dataTable class="display" style="width:100%"></table>
+
+<table
+  class="table table-striped table-bordered table-sm row-border hover"
+  datatable
+  [dtOptions]="dtOptions"
+>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>ATC</th>
+      <th>Active</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody *ngIf="data?.length != 0">
+    <tr *ngFor="let group of data">
+      <td>{{ group.Pharmaceutical_Category_Name }}</td>
+      <td>{{ group.Pharmaceutical_Category_ATC_Code }}</td>
+      <td><input type="checkbox" disabled="disabled" checked="checked" /></td>
+      <td>
+        <button mat-raised-button (click)="openDialog(group)">edit</button>
+      </td>
+    </tr>
+  </tbody>
+  <tbody *ngIf="data?.length == 0">
+    <tr>
+      <td colspan="3" class="no-data-available">No data!</td>
+    </tr>
+  </tbody>
+
+  <tbody></tbody>
+</table>
+
+
+/////////////////////////////////////
+
+<div class="mat-elevation-z8">
+  <mat-table [dataSource]="data" matSort (matSortChange)="sortData($event)">
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="Name"
+        >Name</mat-header-cell
+      >
+      <mat-cell *matCellDef="let element">{{
+        element.Pharmaceutical_Category_Name
+      }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="ATC">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>ATC</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{
+        element.Pharmaceutical_Category_ATC_Code
+      }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Active">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Active</mat-header-cell
+      >
+      <mat-cell *matCellDef="let element">
+        <input type="checkbox" disabled="disabled" checked="checked" />
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Edit">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-raised-button (click)="openDialog(element)">edit</button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef colspan="6"
+        >Loading data ...</mat-footer-cell
+      >
+    </ng-container>
+    <ng-container matColumnDef="noData">
+      <mat-footer-cell *matFooterCellDef colspan="6"
+        >No data ...</mat-footer-cell
+      >
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <mat-footer-row
+      *matFooterRowDef="['loading']"
+      [ngClass]="{ hide: data != null }"
+    ></mat-footer-row>
+    <mat-footer-row
+      *matFooterRowDef="['noData']"
+      [ngClass]="{ hide: data != null && data.length != 0 }"
+    ></mat-footer-row>
+  </mat-table>
+</div>
