@@ -1,0 +1,8 @@
+tr :hover {
+  background-color: aqua;
+  cursor: pointer;
+}
+.example-button-row button,
+.example-button-row a {
+  margin-right: 4px;
+}

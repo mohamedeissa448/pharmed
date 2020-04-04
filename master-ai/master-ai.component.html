@@ -1,0 +1,145 @@
+<div class="search-div">
+  <button mat-raised-button (click)="onAdd()">
+    <mat-icon>add</mat-icon>Add
+  </button>
+  <mat-form-field class="search-form-field">
+    <input
+      matInput
+      [(ngModel)]="searchKey"
+      placeholder="Search"
+      autocomplete="off"
+      (keyup)="applyFilter()"
+    />
+    <button
+      *ngIf="searchKey"
+      mat-button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="onSearchClear()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+<div>
+  <div class="example-button-row">
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">A</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">B</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">C</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">D</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">E</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">F</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">G</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">H</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">I</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)"> J</button>
+     <button mat-button color="accent" (click)="filterByName($event.target.innerText)">K</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">L</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">M</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">N</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">O</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">P</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">Q</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">R</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">S</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">T</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">U</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">V</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">W</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">X</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">Y</button>
+    <button mat-button color="accent" (click)="filterByName($event.target.innerText)">Z</button>
+  </div>
+</div>
+<table mat-table [dataSource]="AIs" class="mat-elevation-z8 " matSort>
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <ng-container matColumnDef="AI status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+    <td mat-cell *matCellDef="let element" (click)="rowClicked(element)">
+      <span
+        *ngIf="element.AI_Status != 1 && element.AI_Status != 3"
+        class="material-icons"
+      >
+        av_timer
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="AI Name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      AI Name
+    </th>
+    <td mat-cell *matCellDef="let element" (click)="rowClicked(element)">
+      {{ element.AI_Name }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="ATC Code">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      ATC Code
+    </th>
+    <td mat-cell *matCellDef="let element" (click)="rowClicked(element)">
+      {{ element.AI_ATC_Code }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Pharmacological Category">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Pharmacological Category
+    </th>
+    <td mat-cell *matCellDef="let element" (click)="rowClicked(element)">
+      <mat-chip-list>
+        <mat-chip
+          *ngFor="let category of element.pharamaceutical"
+          class="mat-accent"
+          (click)="rowClicked(element)"
+        >
+          {{ category.Pharmaceutical_Category_Name }}
+        </mat-chip>
+      </mat-chip-list>
+    </td>
+  </ng-container>
+
+  <ng-container class="col" matColumnDef="Actions">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        *ngIf="!(element.AI_Status != 1 && element.AI_Status != 3)"
+        mat-raised-button
+        (click)="onEdit(element)"
+      >
+        edit
+      </button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="loading">
+    <mat-footer-cell *matFooterCellDef colspan="6">
+      Loading data...
+    </mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="noData">
+    <mat-footer-cell *matFooterCellDef colspan="6">
+      No data.
+    </mat-footer-cell>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <mat-footer-row
+    *matFooterRowDef="['loading']"
+    [ngClass]="{ hide: AIs != null }"
+  ></mat-footer-row>
+  <mat-footer-row
+    *matFooterRowDef="['noData']"
+    [ngClass]="{ hide: !(AIs != null && AIs.length == 0) }"
+  ></mat-footer-row>
+</table>
+
+<mat-paginator
+  [length]="100"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  showFirstLastButtons
+>
+</mat-paginator>
